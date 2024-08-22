@@ -1,0 +1,20 @@
+version: "3"
+name: streamlit_template
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GITHUB_URL: https://github.com/bartb142/streamlit_template.git
+        PORT: 8503
+    environment:
+      - GITHUB_URL=https://github.com/bartb142/streamlit_template.git
+      - PORT=8503
+    container_name: streamlit_template
+    hostname: streamlit_template
+    command: ["streamlit", "run", "Home.py", "--server.port=8503", "--server.address=0.0.0.0"]
+    ports:
+      - 8503:8503
+    volumes:
+      - ./app:/var/www/app

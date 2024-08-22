@@ -1,0 +1,5 @@
+import streamlit as st
+import util
+
+util.common_page_config()
+st.write("Home Page")
