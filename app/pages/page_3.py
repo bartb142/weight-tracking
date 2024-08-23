@@ -1,5 +1,5 @@
 import streamlit as st
 import util
 
-util.common_page_config()
-st.write("Page 3")
+st.write("# 數據分析工具")
+st.write('## Coming soon.')

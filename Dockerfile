@@ -4,6 +4,8 @@ FROM streamlit-custom:latest
 
 WORKDIR /var/www
 
+RUN pip3 install --upgrade pip
+
 # Define build arguments
 ARG GITHUB_URL=https://github.com/bartb142/streamlit_template.git
 ENV GITHUB_URL=${GITHUB_URL}
