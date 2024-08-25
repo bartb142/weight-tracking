@@ -19,6 +19,7 @@ page1 = st.Page(
     page='pages/page_1.py',
     title='體重記錄',
     icon=':material/add_notes:',
+    url_path='/form',
     default=True,
 )
 
@@ -26,12 +27,14 @@ page2 = st.Page(
     page='pages/page_2.py',
     title='數據看板',
     icon=':material/bar_chart:',
+    url_path='/dashboard',
 )
 
 page3 = st.Page(
     page='pages/page_3.py',
     title='數據分析工具',
     icon=':material/analytics:',
+    url_path='/explorer',
 )
 
 # Nav setup
