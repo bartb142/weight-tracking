@@ -37,7 +37,7 @@ if data_exist:
         bart_df = df.query('profile == "Bart"')
         bart_df = bart_df.drop(columns='profile')
         bart_df = bart_df.sort_values(by='date', ascending=False)
-        l7_bart_avgs = bart_df.head(7).drop(columns='date').mean()
+        l7_bart_avgs = bart_df.head(7).drop(columns='date').mean().apply(lambda x:round(x,2))
         # Metrics
         col1, col2, col3 = st.columns(3)
         col1.metric('最近七次平均體重(Kg)',l7_bart_avgs['weight'])
@@ -76,7 +76,7 @@ if data_exist:
         shelly_df = df.query('profile == "Shelly"')
         shelly_df = shelly_df.drop(columns='profile')
         shelly_df = shelly_df.sort_values(by='date', ascending=False)
-        l7_shelly_avgs = shelly_df.head(7).drop(columns='date').mean()
+        l7_shelly_avgs = shelly_df.head(7).drop(columns='date').mean().apply(lambda x:round(x,2))
         # Metrics
         col1, col2, col3 = st.columns(3)
         col1.metric('最近七次平均體重(Kg)',l7_shelly_avgs['weight'])
