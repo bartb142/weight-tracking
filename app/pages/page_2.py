@@ -26,7 +26,7 @@ client.close()
 if data_exist:
     st.dataframe(df,hide_index=True)
     profile_picker = st.multiselect(
-        label='Year filter:',
+        label="",
         options=df['profile'].unique(),
         default=['Bart','Shelly']
     )
