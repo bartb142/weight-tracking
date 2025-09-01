@@ -1,27 +1,23 @@
 # app/Dockerfile
 
-FROM streamlit-custom:latest
+FROM python:3.13-slim
 
 WORKDIR /var/www
 
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN pip3 install --upgrade pip
 
-# Define build arguments
-ARG GITHUB_URL=https://github.com/bartb142/streamlit_template.git
-ENV GITHUB_URL=${GITHUB_URL}
-
-
-RUN git clone $GITHUB_URL .
+COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
 
 WORKDIR /var/www/app
 
-ARG PORT=8501
-ENV PORT=${PORT}
-
-EXPOSE $PORT
+COPY ./app .
 
 HEALTHCHECK CMD curl --fail http://localhost:$PORT/_stcore/health
-
-ENTRYPOINT ["streamlit", "run", "Home.py", "--server.port=8501", "--server.address=0.0.0.0"]
