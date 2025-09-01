@@ -1,7 +1,6 @@
 import streamlit as st
 from pymongo import MongoClient
 import pandas as pd
-import plotly.express as px
 
 # MongoDB connection
 client = MongoClient("mongodb://192.168.1.5:27017/")
@@ -24,11 +23,11 @@ else:
 client.close()
 
 if data_exist:
-    st.dataframe(df,hide_index=True)
+    st.dataframe(df, hide_index=True)
     profile_picker = st.multiselect(
         label="",
         options=df['profile'].unique(),
-        default=['Bart','Shelly']
+        default=['Bart', 'Shelly']
     )
 
     if 'Bart' in profile_picker:
@@ -37,74 +36,32 @@ if data_exist:
         bart_df = df.query('profile == "Bart"')
         bart_df = bart_df.drop(columns='profile')
         bart_df = bart_df.sort_values(by='date', ascending=False)
-        l7_bart_avgs = bart_df.head(7).drop(columns='date').mean().apply(lambda x:round(x,2))
+        l7_bart_avgs = bart_df.head(7).drop(columns='date').mean().apply(lambda x: round(x, 2))
         # Metrics
         col1, col2, col3 = st.columns(3)
-        col1.metric('最近七次平均體重(Kg)',l7_bart_avgs['weight'])
-        col2.metric('最近七次平均肌肉量 (Kg)',l7_bart_avgs['muscle'])
-        col3.metric('最近七次平均體脂率(%)',l7_bart_avgs['fat_percentage'])
-        # Charts Config
-        bart_weight_fig = px.scatter(bart_df, x='date', y=['weight','muscle']).update_layout(
-            xaxis_title='日期', 
-            yaxis_title='體重(Kg)',
-            xaxis=dict(
-                tickformat="%Y-%m-%d",  # Date format (Year-Month-Day)
-                dtick="D1")
-            )
-        bart_weight_fig.for_each_trace(lambda trace: trace.update(name={
-            'weight': '體重 (Kg)',
-            'muscle': '肌肉量 (Kg)'
-        }.get(trace.name, trace.name)))
-
-        bart_fat_fig = px.scatter(bart_df, x='date', y=['fat_percentage','organ_fat_level']).update_layout(
-            xaxis_title='日期', 
-            yaxis_title='體脂率％/內臟脂肪 Level',
-            xaxis=dict(
-                tickformat="%Y-%m-%d",  # Date format (Year-Month-Day)
-                dtick="D1"))
-        bart_fat_fig.for_each_trace(lambda trace: trace.update(name={
-            'fat_percentage':'體脂 %',
-            'organ_fat_level':'內臟脂肪(Level)'
-        }.get(trace.name, trace.name)))
+        col1.metric('最近七次平均體重(Kg)', l7_bart_avgs['weight'])
+        col2.metric('最近七次平均肌肉量 (Kg)', l7_bart_avgs['muscle'])
+        col3.metric('最近七次平均體脂率(%)', l7_bart_avgs['fat_percentage'])
         # Chart Display
-        st.plotly_chart(bart_weight_fig, theme='streamlit', on_select='rerun', selection_mode='points')
-        st.plotly_chart(bart_fat_fig, theme='streamlit', on_select='rerun', selection_mode='points')
+        st.subheader("體重 & 肌肉量")
+        st.line_chart(bart_df.set_index('date')[['weight', 'muscle']])
+        st.subheader("體脂率 & 內臟脂肪 Level")
+        st.line_chart(bart_df.set_index('date')[['fat_percentage', 'organ_fat_level']])
 
-    if 'Shelly' in profile_picker:    
-        # Shelly 
+    if 'Shelly' in profile_picker:
+        # Shelly
         st.header('Shelly')
         shelly_df = df.query('profile == "Shelly"')
         shelly_df = shelly_df.drop(columns='profile')
         shelly_df = shelly_df.sort_values(by='date', ascending=False)
-        l7_shelly_avgs = shelly_df.head(7).drop(columns='date').mean().apply(lambda x:round(x,2))
+        l7_shelly_avgs = shelly_df.head(7).drop(columns='date').mean().apply(lambda x: round(x, 2))
         # Metrics
         col1, col2, col3 = st.columns(3)
-        col1.metric('最近七次平均體重(Kg)',l7_shelly_avgs['weight'])
-        col2.metric('最近七次平均肌肉量 (Kg)',l7_shelly_avgs['muscle'])
-        col3.metric('最近七次平均體脂率(%)',l7_shelly_avgs['fat_percentage'])
-        # Charts Config
-        shelly_weight_fig = px.scatter(shelly_df, x='date', y=['weight','muscle']).update_layout(
-            xaxis_title='日期', 
-            yaxis_title='體重(Kg)',
-            xaxis=dict(
-                tickformat="%Y-%m-%d",  # Date format (Year-Month-Day)
-                dtick="D1"))
-        shelly_weight_fig.for_each_trace(lambda trace: trace.update(name={
-            'weight': '體重 (Kg)',
-            'muscle': '肌肉量 (Kg)'
-        }.get(trace.name, trace.name)))
-
-        shelly_fat_fig = px.scatter(shelly_df, x='date', y=['fat_percentage','organ_fat_level']).update_layout(
-            xaxis_title='日期', 
-            yaxis_title='體脂率％/內臟脂肪 Level',
-            xaxis=dict(
-                tickformat="%Y-%m-%d",  # Date format (Year-Month-Day)
-                dtick="D1"))
-        shelly_fat_fig.for_each_trace(lambda trace: trace.update(name={
-            'fat_percentage':'體脂 %',
-            'organ_fat_level':'內臟脂肪(Level)'
-        }.get(trace.name, trace.name)))
-
+        col1.metric('最近七次平均體重(Kg)', l7_shelly_avgs['weight'])
+        col2.metric('最近七次平均肌肉量 (Kg)', l7_shelly_avgs['muscle'])
+        col3.metric('最近七次平均體脂率(%)', l7_shelly_avgs['fat_percentage'])
         # Chart Display
-        st.plotly_chart(shelly_weight_fig, theme='streamlit', on_select='rerun', selection_mode='points')
-        st.plotly_chart(shelly_fat_fig, theme='streamlit', on_select='rerun', selection_mode='points')
+        st.subheader("體重 & 肌肉量")
+        st.line_chart(shelly_df.set_index('date')[['weight', 'muscle']])
+        st.subheader("體脂率 & 內臟脂肪 Level")
+        st.line_chart(shelly_df.set_index('date')[['fat_percentage', 'organ_fat_level']])
